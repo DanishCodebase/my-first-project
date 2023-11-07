@@ -130,7 +130,7 @@ body>nav {
     width: 100%;
     /* border: var(--hero-border); */
     border-radius: 50%;
-    animation: borderanimation 1s ease 10s var(--forwards);
+    animation: borderanimation 1s ease 3s var(--forwards);
 }
 
 .unmute,
