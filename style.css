@@ -1,5 +1,5 @@
 [data-theme="light"] {
-    --bg-img: url("/assets/icons/day.png");
+    --bg-img: url("./assets/icons/day.png");
     --hover-color: #63b2ff;
     --color-bg: #ffffff;
     --color-fg: #000000;
@@ -13,7 +13,7 @@
 
 [data-theme="dark"] {
     --hover-color: #63b2ff;
-    --bg-img: url("/assets/icons/orange.png");
+    --bg-img: url("./assets/icons/night.png");
     --color-bg: #000000;
     --color-fg: #ffffff;
     --color-border: #303030;
@@ -53,7 +53,7 @@ section {
 /* theme button */
 .theme {
     transition: all .21s ease-in-out;
-    background-image: url("/assets/icons/night.png");
+    background-image: url("./assets/icons/night.png");
     height: 40px;
     width: 40px;
     background-position: center;
@@ -68,7 +68,7 @@ section {
 }
 
 .theme.theme--light {
-    background-image: url("/assets/icons/day.png");
+    background-image: url("./assets/icons/day.png");
 }
 
 
