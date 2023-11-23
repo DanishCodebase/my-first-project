@@ -49,3 +49,23 @@ document.querySelector(".mute").addEventListener("click", function () {
     document.querySelector(".unmute").classList.toggle("d-none");
     document.querySelector(".lap").muted = true;
 });
+
+function autoShowPopup() {
+    setTimeout(showPopup, 7000);
+}
+
+document.getElementById("close").addEventListener("click", hidePopup);
+
+window.addEventListener("load", autoShowPopup);
+
+function showPopup() {
+    document.querySelector(".pop-up").style.opacity = "1";
+    document.querySelector(".pop-up").style.visibility = "visible";
+    document.body.style.overflow = "hidden";
+}
+
+function hidePopup() {
+    document.querySelector(".pop-up").style.opacity = "0";
+    document.querySelector(".pop-up").style.visibility = "hidden";
+    document.body.style.overflow = "";
+}

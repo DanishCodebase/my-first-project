@@ -313,8 +313,14 @@ h2 {
     padding-top: 70px !important
 }
 
-.free-courses>img,.free-courses>iframe {
-    border-radius: 12px
+.free-courses>img,
+.free-courses>iframe {
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.svg{
+    cursor: pointer;
 }
 
 .free-course {

@@ -1,23 +1,3 @@
-function showPopup() {
-    document.querySelector(".pop-up").style.opacity = "1";
-    document.querySelector(".pop-up").style.visibility = "visible";
-    document.body.style.overflow = "hidden";
-}
-
-function hidePopup() {
-    document.querySelector(".pop-up").style.opacity = "0";
-    document.querySelector(".pop-up").style.visibility = "hidden";
-    document.body.style.overflow = "";
-}
-
-function autoShowPopup() {
-    setTimeout(showPopup, 7000);
-}
-
-document.getElementById("close").addEventListener("click", hidePopup);
-
-window.addEventListener("load", autoShowPopup);
-
 window.onbeforeunload = () => {
     for (let e of document.getElementsByTagName("form")) e.reset();
 };
