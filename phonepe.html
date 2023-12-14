@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Payment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.1.0/jsrsasign-all-min.js"></script>
+</head>
+
+<body>
+
+    <div>
+        <h1>Payment Integration</h1>
+        <form id="paymentForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required><br><br>
+            <label for="number">Mobile Number:</label>
+            <input type="text" id="number" name="number" required><br><br>
+            <button type="button" onclick="submitPayment()">Submit Payment</button>
+        </form>
+    </div>
+
+    <script>
+        function generateTransactionId() {
+            const timestamp = new Date().getTime().toString(36);
+            const randomStr = Math.random().toString(36).substring(2, 15);
+            return timestamp + randomStr;
+        }
+
+        function generateMerchantUserId() {
+            return 'MUID' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // Generate a unique transaction ID
+        var merchantTransactionId = generateTransactionId();
+        // var merchantTransactionId = 'MT7850590068188104';
+        var merchant_id = 'M1KE7GMKEOEB';
+        var merchantUserId = generateMerchantUserId();
+        var salt_key = '56392f2a-82cd-47ec-a0e4-93a115181eb7';
+
+        // Function to perform SHA-256 hashing
+        function sha256(str) {
+            var hexHash = KJUR.crypto.Util.sha256(str);
+            return hexHash;
+        }
+
+        function submitPayment() {
+            var formData = {
+                name: document.getElementById('name').value,
+                amount: parseInt(document.getElementById('amount').value),
+                number: document.getElementById('number').value
+            };
+
+            try {
+                var data = {
+                    merchantId: merchant_id,
+                    merchantTransactionId: merchantTransactionId,
+                    merchantUserId: merchantUserId,
+                    name: formData.name,
+                    amount: formData.amount * 100,
+                    redirectUrl: 'http://127.0.0.1:5500/status.html',
+                    redirectMode: 'POST',
+                    mobileNumber: formData.number,
+                    paymentInstrument: {
+                        type: 'PAY_PAGE'
+                    }
+                };
+
+                var payload = JSON.stringify(data);
+                var payloadMain = btoa(payload);
+
+                var keyIndex = 1;
+                var string = payloadMain + '/pg/v1/pay' + salt_key;
+
+                var sha256Hash = sha256(string);
+                var checksum = sha256Hash + '###' + keyIndex;
+
+                var prod_URL = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
+
+                fetch(prod_URL, {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-VERIFY': checksum
+                    },
+                    body: JSON.stringify({ request: payloadMain })
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        console.log(data);
+                        window.location.href = data.data.instrumentResponse.redirectInfo.url;
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.1.0/jsrsasign-all-min.js"></script>
+</head>
+<body>
+
+<div>
+    <h1>Payment Integration</h1>
+    <form id="paymentForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+        <label for="number">Mobile Number:</label>
+        <input type="text" id="number" name="number" required><br><br>
+        <button type="button" onclick="submitPayment()">Submit Payment</button>
+    </form>
+    <div id="paymentStatus" style="display: none;">
+        <h2>Payment Status</h2>
+        <p id="paymentMessage"></p>
+    </div>
+</div>
+
+<script>
+var merchantTransactionId = 'MT7850590068188104';
+var merchant_id = 'PGTESTPAYUAT';
+var merchantUserId = 'MUID123';
+var salt_key = '099eb0cd-02cf-4e2a-8aca-3e6c6aff0399';
+function sha256(str) {
+    var hexHash = KJUR.crypto.Util.sha256(str);
+    return hexHash;
+}
+
+function submitPayment() {
+    var formData = {
+        name: document.getElementById('name').value,
+        amount: parseInt(document.getElementById('amount').value),
+        number: document.getElementById('number').value
+    };
+
+    try {
+        var data = {
+            merchantId: merchant_id,
+            merchantTransactionId: merchantTransactionId,
+            merchantUserId: merchantUserId,
+            name: formData.name,
+            amount: formData.amount * 100,
+            redirectUrl: 'http://localhost:5000/api/status/' + merchantTransactionId,
+            redirectMode: 'POST',
+            mobileNumber: formData.number,
+            paymentInstrument: {
+                type: 'PAY_PAGE'
+            }
+        };
+
+        var payload = JSON.stringify(data);
+        var payloadMain = btoa(payload);
+
+        var keyIndex = 1;
+        var string = payloadMain + '/pg/v1/pay' + salt_key;
+
+        var sha256Hash = sha256(string);
+        var checksum = sha256Hash + '###' + keyIndex;
+
+        var prod_URL = 'https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay';
+
+        fetch(prod_URL, {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-VERIFY': checksum
+            },
+            body: JSON.stringify({ request: payloadMain })
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data);
+            handlePaymentStatus(data); 
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+
+function handlePaymentStatus(data) {
+    var paymentStatus = document.getElementById('paymentStatus');
+    paymentStatus.style.display = 'block'; 
+
+    var paymentMessage = document.getElementById('paymentMessage');
+    if (data && data.data && data.data.instrumentResponse && data.data.instrumentResponse.redirectInfo) {
+        paymentMessage.textContent = 'Payment successful!'; 
+    } else {
+        paymentMessage.textContent = 'Payment failed. Please try again.'; 
+    }
+}
+</script>
+
+</body>
+</html> -->
