@@ -221,6 +221,7 @@
             headers: {
               accept: "application/json",
               "Content-Type": "application/json",
+              "X-VERIFY": checksum,
             },
             body: JSON.stringify({ request: payloadMain }),
           })
