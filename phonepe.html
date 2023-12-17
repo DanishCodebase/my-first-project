@@ -1,14 +1,153 @@
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <title>Payment</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.1.0/jsrsasign-all-min.js"></script>
-</head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo Bhai:wght@400&display=swap"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;900&display=swap");
 
-<body>
+      input {
+        caret-color: red;
+      }
 
-    <div>
+      body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #ecf0f3;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        place-items: center;
+        overflow: hidden;
+        font-family: poppins;
+      }
+
+      .container {
+        position: relative;
+        width: 350px;
+        height: 500px;
+        border-radius: 20px;
+        padding: 40px;
+        box-sizing: border-box;
+        background: #ecf0f3;
+        box-shadow: 14px 14px 20px #cbced1, -14px -14px 20px white;
+      }
+
+      .brand-logo {
+        height: 100px;
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        border-radius: 50%;
+        box-sizing: border-box;
+        box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px white;
+      }
+
+      .brand-title {
+        margin-top: 10px;
+        font-weight: 900;
+        font-size: 1.8rem;
+        color: #582d98;
+        font-family: "Baloo Bhai";
+        letter-spacing: 1px;
+      }
+
+      .inputs {
+        text-align: left;
+        margin-top: 30px;
+      }
+
+      label,
+      input,
+      button {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+      }
+
+      label {
+        margin-bottom: 4px;
+      }
+
+      label:nth-of-type(2) {
+        margin-top: 12px;
+      }
+
+      input::placeholder {
+        color: gray;
+      }
+
+      input {
+        background: #ecf0f3;
+        padding: 10px;
+        margin-bottom: 15px;
+        padding-left: 20px;
+        height: 50px;
+        font-size: 14px;
+        border-radius: 50px;
+        box-shadow: inset 6px 6px 6px #cbced1, inset -6px -6px 6px white;
+      }
+
+      button {
+        color: white;
+        margin-top: 20px;
+        background: #582d98;
+        height: 40px;
+        border-radius: 20px;
+        cursor: pointer;
+        box-shadow: 6px 6px 6px #cbced1, -6px -6px 6px white;
+        transition: 0.5s;
+      }
+
+      button:hover {
+        box-shadow: none;
+      }
+
+      a {
+        position: absolute;
+        font-size: 8px;
+        bottom: 4px;
+        right: 4px;
+        text-decoration: none;
+        color: black;
+        background: yellow;
+        border-radius: 10px;
+        padding: 2px;
+      }
+
+      h1 {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="brand-logo">
+        <img src="./phonepe.png" alt="" width="80" />
+      </div>
+      <div class="brand-title">PhonePe</div>
+      <form action="/makePayment" method="post" class="inputs">
+        <input type="text" id="name" name="name" placeholder="Name" required />
+        <input type="number" id="amount" name="amount" placeholder="Amount" required />
+        <input type="tel" name="number" id="number" placeholder="Mobile Number" required />
+        <button type="button" onclick="submitPayment()">PAY NOW</button>
+      </form>
+    </div>
+    <!-- <div>
         <h1>Payment Integration</h1>
         <form id="paymentForm">
             <label for="name">Name:</label>
@@ -19,92 +158,90 @@
             <input type="text" id="number" name="number" required><br><br>
             <button type="button" onclick="submitPayment()">Submit Payment</button>
         </form>
-    </div>
+    </div> -->
 
     <script>
-        function generateTransactionId() {
-            const timestamp = new Date().getTime().toString(36);
-            const randomStr = Math.random().toString(36).substring(2, 15);
-            return timestamp + randomStr;
+      function generateTransactionId() {
+        const timestamp = new Date().getTime().toString(36);
+        const randomStr = Math.random().toString(36).substring(2, 15);
+        return timestamp + randomStr;
+      }
+
+      function generateMerchantUserId() {
+        return "MUID" + Math.random().toString(36).substr(2, 9);
+      }
+
+      // Generate a unique transaction ID
+      var merchantTransactionId = generateTransactionId();
+      // var merchantTransactionId = 'MT7850590068188104';
+      var merchant_id = "M1KE7GMKEOEB";
+      var merchantUserId = generateMerchantUserId();
+      var salt_key = "56392f2a-82cd-47ec-a0e4-93a115181eb7";
+
+      // Function to perform SHA-256 hashing
+      function sha256(str) {
+        var hexHash = KJUR.crypto.Util.sha256(str);
+        return hexHash;
+      }
+
+      function submitPayment() {
+        var formData = {
+          name: document.getElementById("name").value,
+          amount: parseInt(document.getElementById("amount").value),
+          number: document.getElementById("number").value,
+        };
+
+        try {
+          var data = {
+            merchantId: merchant_id,
+            merchantTransactionId: merchantTransactionId,
+            merchantUserId: merchantUserId,
+            name: formData.name,
+            amount: formData.amount * 100,
+            redirectMode: "POST",
+            mobileNumber: formData.number,
+            paymentInstrument: {
+              type: "PAY_PAGE",
+            },
+          };
+
+          var payload = JSON.stringify(data);
+          var payloadMain = btoa(payload);
+
+          var keyIndex = 1;
+          var string = payloadMain + "/pg/v1/pay" + salt_key;
+
+          var sha256Hash = sha256(string);
+          var checksum = sha256Hash + "###" + keyIndex;
+
+          var prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
+
+          fetch(prod_URL, {
+            method: "POST",
+            headers: {
+              accept: "application/json",
+              "Content-Type": "application/json",
+              "X-VERIFY": checksum,
+            },
+            body: JSON.stringify({ request: payloadMain }),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              console.log(data);
+              window.location.href =
+                data.data.instrumentResponse.redirectInfo.url;
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        } catch (error) {
+          console.error("Error:", error.message);
         }
-
-        function generateMerchantUserId() {
-            return 'MUID' + Math.random().toString(36).substr(2, 9);
-        }
-
-        // Generate a unique transaction ID
-        var merchantTransactionId = generateTransactionId();
-        // var merchantTransactionId = 'MT7850590068188104';
-        var merchant_id = 'M1KE7GMKEOEB';
-        var merchantUserId = generateMerchantUserId();
-        var salt_key = '56392f2a-82cd-47ec-a0e4-93a115181eb7';
-
-        // Function to perform SHA-256 hashing
-        function sha256(str) {
-            var hexHash = KJUR.crypto.Util.sha256(str);
-            return hexHash;
-        }
-
-        function submitPayment() {
-            var formData = {
-                name: document.getElementById('name').value,
-                amount: parseInt(document.getElementById('amount').value),
-                number: document.getElementById('number').value
-            };
-
-            try {
-                var data = {
-                    merchantId: merchant_id,
-                    merchantTransactionId: merchantTransactionId,
-                    merchantUserId: merchantUserId,
-                    name: formData.name,
-                    amount: formData.amount * 100,
-                    redirectUrl: 'http://127.0.0.1:5500/status.html',
-                    redirectMode: 'POST',
-                    mobileNumber: formData.number,
-                    paymentInstrument: {
-                        type: 'PAY_PAGE'
-                    }
-                };
-
-                var payload = JSON.stringify(data);
-                var payloadMain = btoa(payload);
-
-                var keyIndex = 1;
-                var string = payloadMain + '/pg/v1/pay' + salt_key;
-
-                var sha256Hash = sha256(string);
-                var checksum = sha256Hash + '###' + keyIndex;
-
-                var prod_URL = 'https://api.phonepe.com/apis/hermes/pg/v1/pay';
-
-                fetch(prod_URL, {
-                    method: 'POST',
-                    headers: {
-                        'accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-VERIFY': checksum
-                    },
-                    body: JSON.stringify({ request: payloadMain })
-                })
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (data) {
-                        console.log(data);
-                        window.location.href = data.data.instrumentResponse.redirectInfo.url;
-                    })
-                    .catch(function (error) {
-                        console.error(error);
-                    });
-            } catch (error) {
-                console.error('Error:', error.message);
-            }
-        }
+      }
     </script>
-
-</body>
-
+  </body>
 </html>
 
 <!-- <!DOCTYPE html>
