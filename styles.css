@@ -53,3 +53,24 @@
             margin-right: 20px;
         }
     }
+    .blink {
+        animation: blink-animation 1s steps(5, start) infinite;
+        -webkit-animation: blink-animation 1s steps(5, start) infinite;
+        color: red;
+        position: relative;
+        font-size: 20px;
+        bottom: 10px;
+      }
+      @keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+      @-webkit-keyframes blink-animation {
+        to {
+          visibility: hidden;
+        }
+      }
+      @media (max-width:1200px) and (min-width: 992px){
+      .wfit{margin-right: 134px;}
+      }
