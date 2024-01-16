@@ -56,9 +56,9 @@ function show() {
     (e[s - 1].style.display = "block"),
     setTimeout(show, 1200);
 }
-function autoShowPopup() {
-  setTimeout(showPopup, 7e3);
-}
+// function autoShowPopup() {
+//   setTimeout(showPopup, 7e3);
+// }
 function showPopup() {
   (document.querySelector(".pop-up").style.opacity = "1"),
     (document.querySelector(".pop-up").style.visibility = "visible"),
@@ -70,4 +70,6 @@ function hidePopup() {
     (document.body.style.overflow = "");
 }
 
+window.addEventListener("load",autoShowPopup);
+document.getElementById("close").addEventListener("click",hidePopup);
 show();
