@@ -923,7 +923,13 @@
     </section>
     <section class="disclaimer">
       <div class="container px-xl-5">
-        <marquee behavior="" direction=""
+        <marquee
+          behavior="scroll"
+          direction="left"
+          onmouseout="this.start();"
+          onmouseover="this.stop();"
+          scrolldelay="1"
+          scrolldirection="left"
           >Disclaimer / Disclosure: All content provided in this channel is for
           informational and educational purposes only and is not meant to
           represent trade or investment recommendation. Kindly contact your
