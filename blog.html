@@ -19,14 +19,20 @@
         background-position: center;
       }
       .cut-text {
-        /* --max-lines: 3;
+        --max-lines: 2;
         --line-height: 1.4;
-        max-height: calc(var(--max-lines)*1em* var(--line-height));
-        overflow: hidden; */
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+        height: calc(var(--max-lines)*1em* var(--line-height));
+        /* line-height: var(--line-height); */
         overflow: hidden;
+        /* display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden; */
+      }
+
+      .linc {
+        display: inline-block;
+        text-decoration: none;
       }
     </style>
   </head>
@@ -117,24 +123,29 @@
         <div class="mt-3 mb-5 pb-3 row row-cols-1 row-cols-md-2 g-4">
           <div class="col">
             <div class="card">
-              <img
-                src="https://iso.500px.com/wp-content/uploads/2023/12/Woman-is-laying-in-hammock-and-using-phone-By-Natalie-Zotova-2-1500x1000.jpeg"
-                class="card-img-top"
-                alt="Hollywood Sign on The Hill"
-              />
+              <a href="./blog/ai-in-stock-trading-revolutionizing-investment-strategies.html">
+                <img
+                  src="./blog/images/AI Trading1.jpg"
+                  class="card-img-top"
+                  alt="Hollywood Sign on The Hill"
+              /></a>
               <div class="card-body">
-                <h3 class="card-title fw-bold">
-                  Celebrating top performing Licensing photos of 2023
-                </h3>
-                <p class="card-text cut-text">
-                  As 2023 comes to a close, it’s time to showcase and celebrate
-                  some of the top-performing photos by outstanding 500px
-                  contributors.
-                </p>
+                <a class="card-title linc" href="./blog/ai-in-stock-trading-revolutionizing-investment-strategies.html">
+                  <h3 class="card-title fw-bold">
+                    AI in Stock Trading: Revolutionizing Investment Strategies
+                  </h3></a
+                >
+                <a class="card-title linc" href="./blog/ai-in-stock-trading-revolutionizing-investment-strategies.html">
+                  <p class="card-text cut-text">
+                    Step into the world of AI in stock trading with our guide, ‘AI
+                  in Stock Trading: Revolutionizing Investment Strategies.’
+                  We’re here to make it easy for everyone, especially beginners.
+                  </p>
+                </a>
                 <a
-                  href=""
+                  href="./blog/ai-in-stock-trading-revolutionizing-investment-strategies.html"
                   type="button"
-                  class="px-5 btn effect hero-btn rounded-pill btn-lg px-4 me-md-2 blue"
+                  class="px-5 mt-3 btn effect hero-btn rounded-pill btn-lg px-4 me-md-2 blue"
                   >Read more...</a
                 >
               </div>
